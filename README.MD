@@ -1,62 +1,288 @@
-# Rust experiments
 
-Repository to experiment with Rust as a second language for building CLI and projects as well as some libraries for Python with Pyo3.
+# Rust Learning Notes
 
----
-Learning with the official book and the interactive one
-checkpoint : https://rust-book.cs.brown.edu/ch03-03-how-functions-work.html
+## Introduction
 
-## Memos from the book
+Repository to experiment with Rust as a second language for building CLI projects and libraries for Python with Pyo3.
 
-- By default variable are not mutable (eg: cannot be changed after initilization) however we can use the keyword 'mut' to make it mutable
-- CONST are not mutable and cannot be prefix with the mut keywor
-- Rust isn’t limited to low-level systems programming. It’s expressive and ergonomic enough to make CLI apps, web servers, and many other kinds of code quite pleasant to write
-- Rust is a _statically typed_ language, which means that it must know the types of all variables at compile time
-- We can declare twice or more the same value, the first variable is _shadowed_ by the second, which means that the second variable is what the compiler will see when you use the name of the variable
-- `const` can be used in the global scope, and `let` can only be used in a function
-- Rust has four primary scalar types: integers, floating-point numbers, Booleans, and characters.
-	- An _integer_ is a number without a fractional component.
-	- _Signed_ and _unsigned_ refer to whether it’s possible for the numberto be negative—in other words, whether the number needs to have a sign with it (signed) or whether it will only ever be positive and can therefore be represented without a sign (unsigned).
-	- _Compound types_ can group multiple values into one type. Rust has two primitive compound types: tuples and arrays.
-	- Another way to have a collection of multiple values is with an _array_. Unlike a tuple, every element of an array must have the same type. Unlike arrays in some other languages, arrays in Rust have a fixed length.
-	- Arrays are useful when you want your data allocated on the stack
-	- An array is a single chunk of memory of a known, fixed size that can be allocated on the stack. You can access elements of an array using indexing
+**Learning resources:** Official Rust Book and interactive version  
+**Checkpoint:** https://rust-book.cs.brown.edu/ch04-01-what-is-ownership.html 
+
+----------
 
 
-- When a variable is immutable, once a value is bound to a name, you can’t change that value (very important)
-- The main function is special: it is always the first code that runs in every executable Rust program
-- Cargo is Rust’s build system and package manager. Cargo handles bulding, compiling, testing
-- cargo run is a shortcut for building and running the binary
-- memo: downside of rust, compile time is very long in comparaison go is very fast, alsmot instant
-- cargo check can be used to check if the code can compile, much faster than cargo build (does not procude execatutable)
-- In many low-level languages, this kind of check is not done, and when you provide an incorrect index, invalid memory can be accessed. Rust protects you against this kind of error by immediately exiting instead of allowing the memory access and continuing
--
+### Mutability
+
+-   Variables are **immutable by default** and cannot be changed after initialization
+-   Use the `mut` keyword to make a variable mutable
+-   `const` is always immutable and cannot be prefixed with `mut`
+-   `const` can be declared in global scope, while `let` can only be used inside functions
+
+### Example: Mutable vs Immutable
+
 ```rust
-let apples = 5; // immutable
-let mut bananas = 5; // mutable
+let apples = 5;          // immutable
+let mut bananas = 5;     // mutable
+
 ```
 
-- Compilers output and errors are very good, often stating exactly the problem and what to do to solve it
-- 
+### Shadowing
+
+-   A variable can be declared multiple times with the same name
+-   The new declaration creates a new variable that "shadows" the previous one
+-   This is different from mutation—a new variable is actually created with the same name
+
+### Type System
+
+-   Rust is a **statically typed** language: all variable types must be known at compile time
+-   The compiler almost never needs explicit type annotations elsewhere in the code because function signatures require them
+
+----------
 
 
 
-## Rust as a Python programmer
+### Scalar Types
 
-### Miscs
-- Null, type, error are check at compilte time whereas Python allow faster developement at the cost of weaker software in production
-```py
+Rust has four primary scalar types:
+
+1.  **Integers**: numbers without fractional components
+    
+    -   **Signed**: can be negative (need a sign)
+    -   **Unsigned**: only positive (no sign needed)
+2.  **Floating-point numbers**: numbers with decimals
+    
+3.  **Booleans**: `true` or `false`
+    
+4.  **Characters**: single Unicode characters
+    
+
+### Compound Types
+
+Collections of multiple values into one type:
+
+1.  **Tuples**: group values of different types together, fixed length
+2.  **Arrays**: group values of the **same type**, fixed length, allocated on the stack
+    -   Arrays are useful when you want data allocated on the stack
+    -   Efficient for known, fixed-size collections
+    -   Access elements using indexing
+    -   Rust protects against invalid indices by exiting immediately (memory safety)
+
+----------
+
+
+### Defining Functions
+
+-   Use the `fn` keyword to define functions
+-   Rust uses **snake_case** for function names
+-   **All parameters must have declared types** (deliberate design choice for better error messages and safety)
+
+```rust
+fn main() {
+    another_function(5);
+}
+
+fn another_function(x: i32) {
+    println!("The value of x is: {x}");
+}
+
+```
+
+### Statements vs Expressions
+
+-   **Statements**: instructions that perform an action and do **not** return a value
+-   **Expressions**: evaluate to a resultant value that can be used
+-   Rust is an **expression-based language**
+
+**Important:** In Rust, `let y = 6` does **not** return a value (unlike C, Ruby, or JavaScript). You cannot write `x = y = 6` in Rust.
+
+### Return Values
+
+-   Functions can return values to the calling code
+-   Declare the return type using an arrow (`->`) in the function signature
+-   **The return value is the value of the final expression in the function body** (no need for `return` keyword, though it can be used explicitly)
+
+```rust
+fn add_one(x: i32) -> i32 {
+    x + 1  // returns x + 1 (no semicolon!)
+}
+
+```
+
+### if Expressions
+
+-   `if` is an **expression**, not just a statement
+-   The condition **must** be a boolean; Rust has no concept of "truthy" or "falsy" values
+-   Can be used on the right side of a `let` statement
+
+```rust
+fn main() {
+    let condition = true;
+    let number = if condition { 5 } else { 6 };
+    
+    println!("The value of number is: {number}");
+}
+
+```
+
+### Loops
+
+#### `loop` - Infinite Loop
+
+```rust
+let mut count = 0;
+loop {
+    println!("again!");
+    count += 1;
+    if count == 5 {
+        break;  // exit the loop
+    }
+}
+
+```
+
+-   Use `break` to exit the loop explicitly
+-   Use `continue` to skip to the next iteration
+
+#### `while` - Conditional Loop
+
+```rust
+let mut number = 3;
+while number != 0 {
+    println!("{number}!");
+    number -= 1;
+}
+
+```
+
+-   Evaluates a condition; runs while it's `true`
+
+#### `for` - Iteration Over Collections
+
+```rust
+let a = [10, 20, 30, 40, 50];
+
+for element in a {
+    println!("the value is: {element}");
+}
+
+```
+
+-   Safer than index-based loops (no risk of going beyond array bounds)
+-   Machine code can be more efficient (no index comparison at each iteration)
+
+----------
+
+### Ownership (Checkpoint)
+
+**Ownership is Rust's most unique feature** and has deep implications for the rest of the language. It enables Rust to make memory safety guarantees without needing a garbage collector.
+
+----------
+
+## Tooling
+
+### Cargo
+
+Rust's build system and package manager that handles:
+
+-   Building
+-   Compiling
+-   Testing
+
+**Useful commands:**
+
+-   `cargo build`: compiles and produces an executable
+-   `cargo run`: builds and runs in one step
+-   `cargo check`: checks if code can compile without producing an executable (much faster than `cargo build`)
+
+### Compiler Quality
+
+-   Rust's compiler output and error messages are **excellent**
+-   Error messages typically state exactly what the problem is and how to fix it
+-   This makes debugging and learning easier
+
+### Trade-off Note
+
+One downside of Rust compared to Go: **compile time is very long** (Go is almost instant).
+
+----------
+
+## Rust vs Python: A Programmer's Perspective
+
+### Philosophy Differences
+
+Aspect
+
+Rust
+
+Python
+
+**Null handling**
+
+Checked at compile time (won't compile if not handled)
+
+Runtime errors (`AttributeError`)
+
+**Type safety**
+
+Static typing enforced at compile time
+
+Dynamic typing (can reassign different types)
+
+**Error checking**
+
+Compile-time guarantees
+
+Runtime failures
+
+**Development speed**
+
+Slower (painful to get right initially)
+
+Faster (quick prototyping)
+
+**Production reliability**
+
+Once it compiles, code is safe to ship
+
+Weaker guarantees in production
+
+### Example: Null Handling
+
+```python
+# Python - fails at runtime
 user.name = None 
-user.name # Raise Attribute error
-# Rust will not compile if null is not handle (same as Dart)
+user.name  # Raises AttributeError
 
-username: str = "Gaëtan"
-username = 3.14 # Valid Python, data in Py can be dynamicaly changed
-
-# Rust will not compile and raise a type error
 ```
 
-Thoughs : Python is much more faster and suitable for protoping, can be better for scripting, data etc and easier to refacto and iterate at the cost of fiability. Rust make it painful from the get go, once it compile the code is safe to ship.
+```rust
+// Rust - won't compile if not handled
+// (Type system prevents this at compile time)
 
-### Tooling
-Python have a much wider tooling ecosystem
+```
+
+### Example: Type Flexibility
+
+```python
+# Python - valid, but risky
+username: str = "Gaëtan"
+username = 3.14  # No error, data type changed dynamically
+
+```
+
+```rust
+// Rust - compilation error
+username: str = "Gaëtan";
+username = 3.14;  // Type error - won't compile
+
+```
+
+### Summary
+
+-   **Python**: Better for prototyping, scripting, and data work. Faster iteration and refactoring, but weaker reliability
+-   **Rust**: Makes development painful initially, but once code compiles, it's safe to ship. Excellent for systems programming and production reliability
+-   **Rust tooling**: Wider ecosystem in Python, but Rust tooling is robust and growing
+
+----------
+
+
