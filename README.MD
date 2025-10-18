@@ -8,7 +8,7 @@ Repository to experiment with Rust as a second language for building CLI project
 Notes are written as is.
 
 **Learning resources:** Official Rust Book and interactive version  
-**Checkpoint:** https://rust-book.cs.brown.edu/ch04-01-what-is-ownership.html 
+**Checkpoint:** https://rust-book.cs.brown.edu/ch05-00-structs.html
 
 ----------
 
