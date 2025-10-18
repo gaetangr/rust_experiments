@@ -9,6 +9,7 @@ Notes are written as is.
 
 **Learning resources:** Official Rust Book and interactive version  
 **Checkpoint:** https://rust-book.cs.brown.edu/ch05-00-structs.html
+Small exercises to get you used to reading and writing Rust code : https://github.com/rust-lang/rustlings
 
 ----------
 
