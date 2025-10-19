@@ -3,11 +3,11 @@ fn animal_habitat(animal: &str) -> &str {
     let identifier = if animal == "crab" {
         1
     } else if animal == "gopher" {
-        2.0
+        2 // Simple yet took me some time, if the value is 2.0 here the if else will fail since Rust required all value to be the same type 
     } else if animal == "snake" {
         3
     } else {
-        "Unknown"
+        4 
     };
 
     // Don't change the expression below!
