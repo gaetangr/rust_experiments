@@ -10,7 +10,7 @@ mod tests {
 
         // TODO: Use a tuple index to access the second element of `numbers`
         // and assign it to a variable called `second`.
-        // let second = ???;
+        let second = numbers.1; // We use the dot notation to access the second value which is at index 1 since tuple/arrays have the zero indxing
 
         assert_eq!(second, 2, "This is not the 2nd number in the tuple!");
     }
