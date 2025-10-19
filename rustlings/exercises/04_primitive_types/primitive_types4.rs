@@ -7,10 +7,10 @@ mod tests {
     #[test]
     fn slice_out_of_array() {
         let a = [1, 2, 3, 4, 5];
-
+        let nice_slice = &a[1..4]; // thanks python for the warmup, very similar but use dot dot instead of : and we shoud not forget to borrow it from the original array
+        // like in Python array starts at index 0, so 1 from 4 is including value from 2 to 4
         // TODO: Get a slice called `nice_slice` out of the array `a` so that the test passes.
         // let nice_slice = ???
-
         assert_eq!([2, 3, 4], nice_slice);
     }
 }
