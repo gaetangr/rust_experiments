@@ -8,11 +8,11 @@ mod tests {
     // Don't add, change or remove any line.
     #[test]
     fn move_semantics4() {
-        let mut x = Vec::new();
-        let y = &mut x;
-        let z = &mut x;
-        y.push(42);
-        z.push(13);
+        let mut x = Vec::new(); // Create a mutable Vec on the heap
+        let y = &mut x; // Create a mutable reference to x (borrow x mutably)
+        y.push(42); // Push 42 onto the Vec (accessed through y)
+        let z = &mut x; // Create another mutable reference to x (y is no longer used)
+        z.push(13); // Push 13 onto the Vec (accessed through z)
         assert_eq!(x, [42, 13]);
     }
 }
