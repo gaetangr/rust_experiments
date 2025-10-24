@@ -1,12 +1,20 @@
+use std::string;
+
 #[derive(Debug)]
 struct Point {
     x: u64,
     y: u64,
 }
 
-#[derive(Debug)]
+
+
+#[derive(Debug)] // kind of like a decorator in Python ?,
 enum Message {
-    // TODO: Define the different variants used below.
+    Resize { width: u64, height: u64 },
+    Move(Point),
+    Echo(String),
+    ChangeColor(u64,u64,u64),
+    Quit,
 }
 
 impl Message {
